@@ -21,20 +21,32 @@ def index():
 @app.route('/api/listings', methods=['GET'])
 def get_listings():
     pet_type = request.args.get('type', 'all')
-    location = request.args.get('location', '').lower()
-    
+    search_text = request.args.get('search', '').lower()
+
     filtered = LISTINGS
     if pet_type != 'all':
         filtered = [l for l in filtered if l['pet_type'].lower() == pet_type.lower()]
-    if location:
-        filtered = [l for l in filtered if location in l['location'].lower()]
-    
+    if search_text:
+        filtered = [l for l in filtered if 
+            search_text in l['location']['district'].lower() or
+            search_text in l['location']['street'].lower() or
+            search_text in l['location']['house'].lower()
+        ]
+
     return jsonify(filtered)
 
 @app.route('/api/listings', methods=['POST'])
 def create_listing():
     data = request.form.to_dict()
-    
+
+    # Create location dictionary
+    location = {
+        'district': data.pop('district', ''),
+        'street': data.pop('street', ''),
+        'house': data.pop('house', '')
+    }
+    data['location'] = location
+
     # Handle image upload
     if 'photo' in request.files:
         photo = request.files['photo']
@@ -42,7 +54,7 @@ def create_listing():
             # Convert to base64 for simple storage
             photo_data = base64.b64encode(photo.read()).decode('utf-8')
             data['photo'] = photo_data
-    
+
     LISTINGS.append(data)
     return jsonify({"status": "success"})
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetHelper72</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <header>
@@ -27,7 +27,7 @@
 
         <section class="create-listing">
             <h2>Разместить объявление</h2>
-            <form id="listingForm">
+            <form id="listingForm" method="POST" action="{{ url_for('create_listing') }}" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Тип питомца</label>
                     <select name="pet_type" required>
@@ -44,7 +44,11 @@
 
                 <div class="form-group">
                     <label>Местоположение</label>
-                    <input type="text" name="location" placeholder="Введите местоположение" required>
+                    <div class="location-fields">
+                        <input type="text" name="district" placeholder="Район" required>
+                        <input type="text" name="street" placeholder="Улица" required>
+                        <input type="text" name="house" placeholder="Дом" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -67,6 +71,6 @@
         </section>
     </main>
 
-    <script src="/static/js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
