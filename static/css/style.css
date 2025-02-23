@@ -96,12 +96,25 @@ button:hover {
     background-color: #0056b3;
 }
 
+.location-group {
+    margin-bottom: 1rem;
+}
+
+.location-fields {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
 @media (max-width: 768px) {
     main {
         grid-template-columns: 1fr;
     }
-    
+
     .search-bar {
         flex-direction: column;
+    }
+    .location-fields {
+        grid-template-columns: 1fr;
     }
 }

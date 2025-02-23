@@ -26,7 +26,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const listing = {
             pet_type: formData.get('pet_type'),
             breed: formData.get('breed'),
-            location: formData.get('location'),
+            location: {
+                district: formData.get('district'),
+                street: formData.get('street'),
+                house: formData.get('house')
+            },
             description: formData.get('description'),
             contact: formData.get('contact')
         };
@@ -58,15 +62,19 @@ document.addEventListener('DOMContentLoaded', function() {
     petTypeFilter.addEventListener('change', () => displayListings(filterListings()));
 
     function filterListings() {
-        const location = searchInput.value.toLowerCase();
+        const searchText = searchInput.value.toLowerCase();
         const type = petTypeFilter.value;
         let listings = getStoredListings();
 
         if (type !== 'all') {
             listings = listings.filter(l => l.pet_type.toLowerCase() === type.toLowerCase());
         }
-        if (location) {
-            listings = listings.filter(l => l.location.toLowerCase().includes(location));
+        if (searchText) {
+            listings = listings.filter(l => 
+                l.location.district.toLowerCase().includes(searchText) ||
+                l.location.street.toLowerCase().includes(searchText) ||
+                l.location.house.toLowerCase().includes(searchText)
+            );
         }
 
         return listings;
@@ -82,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="listing-card">
                 ${listing.photo ? `<img src="data:image/jpeg;base64,${listing.photo}" alt="Pet photo">` : ''}
                 <h3>${listing.pet_type} - ${listing.breed}</h3>
-                <p><strong>Местоположение:</strong> ${listing.location}</p>
+                <p><strong>Местоположение:</strong> ${listing.location.district}, ${listing.location.street}, ${listing.location.house}</p>
                 <p><strong>Описание:</strong> ${listing.description}</p>
                 <p><strong>Контакты:</strong> ${listing.contact}</p>
             </div>
