@@ -96,11 +96,20 @@ button:hover {
     background-color: #0056b3;
 }
 
+.delete-button {
+    background-color: #dc3545;
+    margin-top: 1rem;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
 @media (max-width: 768px) {
     main {
         grid-template-columns: 1fr;
     }
-    
+
     .search-bar {
         flex-direction: column;
     }

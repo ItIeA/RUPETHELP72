@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(listingForm);
         const listing = {
+            id: Date.now().toString(), // Используем timestamp как уникальный ID
             pet_type: formData.get('pet_type'),
             breed: formData.get('breed'),
             location: formData.get('location'),
@@ -72,6 +73,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return listings;
     }
 
+    // Функция удаления объявления
+    function deleteListing(id) {
+        const listings = getStoredListings();
+        const updatedListings = listings.filter(listing => listing.id !== id);
+        saveListings(updatedListings);
+        displayListings(filterListings());
+    }
+
     function displayListings(listings) {
         if (listings.length === 0) {
             listingsContainer.innerHTML = '<h2>Объявления не найдены</h2>';
@@ -85,7 +94,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p><strong>Местоположение:</strong> ${listing.location}</p>
                 <p><strong>Описание:</strong> ${listing.description}</p>
                 <p><strong>Контакты:</strong> ${listing.contact}</p>
+                <button class="delete-button" onclick="deleteListing('${listing.id}')">Удалить объявление</button>
             </div>
         `).join('');
     }
+
+    // Делаем функцию удаления доступной глобально
+    window.deleteListing = deleteListing;
 });
