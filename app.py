@@ -47,6 +47,9 @@ def create_listing():
     }
     data['location'] = location
 
+    # Add unique ID to the listing
+    data['id'] = str(len(LISTINGS))
+
     # Handle image upload
     if 'photo' in request.files:
         photo = request.files['photo']
@@ -56,6 +59,12 @@ def create_listing():
             data['photo'] = photo_data
 
     LISTINGS.append(data)
+    return jsonify({"status": "success"})
+
+@app.route('/api/listings/<listing_id>', methods=['DELETE'])
+def delete_listing(listing_id):
+    global LISTINGS
+    LISTINGS = [l for l in LISTINGS if l.get('id') != listing_id]
     return jsonify({"status": "success"})
 
 if __name__ == '__main__':

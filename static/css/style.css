@@ -96,6 +96,15 @@ button:hover {
     background-color: #0056b3;
 }
 
+.delete-button {
+    background-color: #dc3545;
+    margin-top: 1rem;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
 .location-group {
     margin-bottom: 1rem;
 }
