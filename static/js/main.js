@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(listingForm);
         const listing = {
+            id: Date.now().toString(), // Используем timestamp как уникальный ID
             pet_type: formData.get('pet_type'),
             breed: formData.get('breed'),
             location: {
@@ -80,20 +81,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return listings;
     }
 
-    async function deleteListing(listingId) {
-        try {
-            const response = await fetch(`/api/listings/${listingId}`, {
-                method: 'DELETE'
-            });
-            if (response.ok) {
-                const listings = getStoredListings();
-                const updatedListings = listings.filter(l => l.id !== listingId);
-                saveListings(updatedListings);
-                displayListings(filterListings());
-            }
-        } catch (error) {
-            console.error('Error deleting listing:', error);
-        }
+    // Упрощенная функция удаления
+    function deleteListing(id) {
+        const listings = getStoredListings();
+        const updatedListings = listings.filter(listing => listing.id !== id);
+        saveListings(updatedListings);
+        displayListings(filterListings());
     }
 
     function displayListings(listings) {
@@ -112,18 +105,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button class="delete-button" onclick="deleteListing('${listing.id}')">Удалить объявление</button>
             </div>
         `).join('');
-
-        // Add event listeners to delete buttons.  This is crucial to ensure that dynamically added buttons work.
-        document.querySelectorAll('.delete-button').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const listingId = button.getAttribute('data-listing-id'); //Use button instead of e.target
-                deleteListing(listingId);
-            });
-        });
-
     }
 
-    // Make deleteListing function available globally
+    // Делаем функцию удаления доступной глобально
     window.deleteListing = deleteListing;
 });

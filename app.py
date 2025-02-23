@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify
 import json
 from werkzeug.utils import secure_filename
 import base64
+import datetime
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev_key")
@@ -47,8 +48,8 @@ def create_listing():
     }
     data['location'] = location
 
-    # Add unique ID to the listing
-    data['id'] = str(len(LISTINGS))
+    # Add timestamp-based ID to the listing
+    data['id'] = datetime.datetime.now().isoformat()
 
     # Handle image upload
     if 'photo' in request.files:
